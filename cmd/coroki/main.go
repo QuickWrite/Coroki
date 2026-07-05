@@ -23,11 +23,15 @@ import (
 	"time"
 
 	"github.com/QuickWrite/Coroki/internal/server"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	// Loading the environment file. If the file cannot be found, the error should be ignored.
+	_ = godotenv.Load()
 
 	handler := server.Routes()
 
