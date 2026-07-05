@@ -15,9 +15,32 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/QuickWrite/Coroki/internal/server"
 )
 
 func main() {
-	fmt.Println("Hello, Coroki!")
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	handler := server.Routes()
+
+	srv, err := server.Start(ctx, server.Config{
+		Addr:         getenv("ADDR", ":8080"),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}, handler)
+
+	if err != nil {
+		log.Fatalf("server start: %v", err)
+	}
+
+	_ = srv
 }
