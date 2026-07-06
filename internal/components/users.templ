@@ -1,0 +1,17 @@
+package components
+
+import (
+    db "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
+)
+
+templ UserPage(users []db.User) {
+    @page("User List") {
+        <h1>User List</h1>
+
+        <ol>
+            for _, item := range users {
+                <li>{ item.Name } - { item.Email }</li>
+            }
+        </ol>
+    }
+}
