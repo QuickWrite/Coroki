@@ -1,0 +1,22 @@
+-- +goose Up
+CREATE EXTENSION IF NOT EXISTS CITEXT;
+
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    email CITEXT NOT NULL UNIQUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE user_credentials (
+    user_id BIGSERIAL PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- +goose Down
+DROP TABLE users;
+DROP EXTENSION IF EXISTS CITEXT;
+DROP TABLE user_credentials;
