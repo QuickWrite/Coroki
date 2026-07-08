@@ -1,10 +1,10 @@
 package components
 
 import (
-    db "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
+	"github.com/QuickWrite/Coroki/internal/data"
 )
 
-templ UserPage(users []db.User) {
+templ UserPage(users []data.User) {
     @page("User List") {
         <h1>User List</h1>
 

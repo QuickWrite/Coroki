@@ -23,6 +23,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/QuickWrite/Coroki/internal/data"
 	"github.com/QuickWrite/Coroki/internal/db"
 	"github.com/QuickWrite/Coroki/internal/server"
 	"github.com/joho/godotenv"
@@ -56,7 +57,9 @@ func main() {
 		log.Fatalf("database couldn't be migrated: %v", err)
 	}
 
-	handler := server.Routes(sqlDB)
+	handler := server.Routes(data.ServerContext{
+		DB: sqlDB,
+	})
 
 	srv, err := server.Start(ctx, server.Config{
 		Addr:         env("ADDR", ":8080"),

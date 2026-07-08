@@ -1,18 +1,19 @@
 package server
 
 import (
-	"database/sql"
-	"encoding/json"
 	"net/http"
 
-	"github.com/QuickWrite/Coroki/internal/components"
+	"github.com/QuickWrite/Coroki/internal/data"
 	db "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
+	"github.com/QuickWrite/Coroki/internal/web/user"
 )
 
-func Routes(sqlDb *sql.DB) http.Handler {
+func Routes(context data.ServerContext) http.Handler {
 	mux := http.NewServeMux()
 
-	query := db.New(sqlDb)
+	query := db.New(context.DB)
+
+	userRouter := user.New(user.NewDbUserStore(query))
 
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -20,49 +21,7 @@ func Routes(sqlDb *sql.DB) http.Handler {
 	})
 
 	// Two temporary routes to test out the database
-	mux.HandleFunc("GET /users", func(w http.ResponseWriter, r *http.Request) {
-		users, err := query.GetUsers(r.Context())
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("The users could not be queried"))
-		}
-
-		if users == nil {
-			users = make([]db.User, 0)
-		}
-
-		w.Header().Set("X-Powered-By", "Coroki")
-		w.Header().Set("Server", "Coroki/0.0.0")
-		w.WriteHeader(http.StatusOK)
-		components.UserPage(users).Render(r.Context(), w)
-	})
-
-	mux.HandleFunc("GET /users/{name}/{email}", func(w http.ResponseWriter, r *http.Request) {
-		name := r.PathValue("name")
-		email := r.PathValue("email")
-
-		user, err := query.CreateUser(r.Context(), db.CreateUserParams{
-			Name:  name,
-			Email: email,
-		})
-
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Could not create user"))
-		}
-
-		output, err := json.Marshal(user)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Could not marshal to JSON"))
-		}
-
-		w.Header().Set("X-Powered-By", "Coroki")
-		w.Header().Set("Server", "Coroki/0.0.0")
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(output)
-	})
+	mux.HandleFunc("GET /users", userRouter.HandleGetUsers(context))
 
 	return mux
 }
