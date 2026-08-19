@@ -1,7 +1,6 @@
 package user
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/QuickWrite/Coroki/internal/components"
@@ -9,16 +8,16 @@ import (
 )
 
 type Handler struct {
-	userStore UserStore
+	userStore data.UserStore
 }
 
-func New(userStore UserStore) Handler {
+func New(userStore data.UserStore) Handler {
 	return Handler{
 		userStore: userStore,
 	}
 }
 
-func (h Handler) HandleGetUsers(context data.ServerContext) func(http.ResponseWriter, *http.Request) {
+func (h Handler) HandleGetUsers(dependencies data.Dependencies) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		users, err := h.userStore.GetUsers(r.Context())
 
@@ -32,8 +31,4 @@ func (h Handler) HandleGetUsers(context data.ServerContext) func(http.ResponseWr
 		w.WriteHeader(http.StatusOK)
 		components.UserPage(users).Render(r.Context(), w)
 	}
-}
-
-type UserStore interface {
-	GetUsers(ctx context.Context) ([]data.User, error)
 }
