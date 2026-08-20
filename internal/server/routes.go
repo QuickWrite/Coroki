@@ -59,7 +59,7 @@ func addAppEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencie
 }
 
 func addBaseEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencies) {
-	routerGroup.Static("/static", "./static")
+	routerGroup.Static("/assets", "./web/dist")
 
 	_ = dependencies
 }

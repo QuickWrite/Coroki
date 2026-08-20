@@ -2,10 +2,19 @@ APP_NAME := coroki
 CMD_PATH := ./cmd/coroki
 BIN_DIR := ./bin
 
-.PHONY: build run test clean
+.PHONY: build frontend templ sqlc run test clean
 
-build:
+build: frontend templ sqlc
 	go build -o $(BIN_DIR)/$(APP_NAME) $(CMD_PATH)
+
+frontend:
+	pnpm build
+
+templ:
+	templ generate
+
+sqlc:
+	sqlc generate
 
 run:
 	go run $(CMD_PATH)

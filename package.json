@@ -1,0 +1,21 @@
+{
+    "name": "Coroki",
+    "version": "1.0.0",
+    "description": "A collaborative text based diagram interface. ",
+    "scripts": {
+        "build": "node esbuild.mjs",
+        "watch": "node esbuild.mjs --watch"
+    },
+    "license": "Apache-2.0",
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "^11.3.0",
+            "onFail": "download"
+        }
+    },
+    "type": "module",
+    "devDependencies": {
+        "esbuild": "^0.28.2"
+    }
+}

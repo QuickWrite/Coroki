@@ -28,6 +28,11 @@ bin/
 go.work
 go.work.sum
 
+# Frontend
+## Generated files
+web/dist/
+node_modules/
+
 # env file
 .env
 
