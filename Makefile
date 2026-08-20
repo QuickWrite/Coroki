@@ -15,3 +15,16 @@ test:
 
 clean:
 	rm -rf $(BIN_DIR)
+
+
+# Development Postgres Database
+.PHONY: db-up db-down db-logs
+
+db-up:
+	docker compose -f postgres.yaml up -d
+
+db-down:
+	docker compose -f postgres.yaml down
+
+db-logs:
+	docker compose -f postgres.yaml logs -f
