@@ -1,0 +1,21 @@
+package templates
+
+import "github.com/QuickWrite/Coroki/internal/data"
+
+templ UserPage(users []data.User) {
+    @Layout(PageMeta{
+        Title: "Users | Coroki",
+        Description: "A list of all users of the site",
+        Robots: "index, follow",
+        Scripts: []string{"app.js"},
+        Stylesheets: []string{"app.css"},
+    }) {
+        <h1>Users</h1>
+        
+        <ul>
+            for _, user := range users {
+                <li>{ user.ID } | { user.Name }: { user.Email }</li>
+            }
+        </ul>
+    }
+}

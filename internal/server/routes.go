@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/QuickWrite/Coroki/internal/data"
-	"github.com/QuickWrite/Coroki/internal/web/user"
+	"github.com/QuickWrite/Coroki/internal/web"
 	"github.com/gin-gonic/gin"
 )
 
@@ -48,7 +48,7 @@ func addAuthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies dat
 
 func addUnauthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencies) {
 	// Temporary route to test out the database
-	userRouter := user.New(dependencies.UserStore)
+	userRouter := web.NewUser(dependencies.UserStore)
 
 	routerGroup.GET("/users", mapHandler(userRouter.HandleGetUsers(dependencies)))
 }

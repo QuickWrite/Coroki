@@ -18,8 +18,8 @@ import (
 	"database/sql"
 
 	"github.com/QuickWrite/Coroki/internal/data"
-	db "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
-	"github.com/QuickWrite/Coroki/internal/web/user"
+	"github.com/QuickWrite/Coroki/internal/db"
+	sqldb "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
 )
 
 // Creates the needed dependencies for the application to work.
@@ -27,9 +27,9 @@ import (
 // This function currently uses the database implementation for the different
 // implementations.
 func createDependencies(database *sql.DB) data.Dependencies {
-	query := db.New(database)
+	query := sqldb.New(database)
 
 	return data.Dependencies{
-		UserStore: user.NewDbUserStore(query),
+		UserStore: db.NewDbUserStore(query),
 	}
 }

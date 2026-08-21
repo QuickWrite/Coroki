@@ -1,0 +1,65 @@
+package templates
+
+type PageMeta struct {
+	Title       string
+	Description string
+	Canonical   string
+
+	// Search engine behavior.
+	Robots string
+
+    // Stylesheets and Scripts
+    Stylesheets []string
+	Scripts     []string
+
+	// JSON-LD structured data.
+	StructuredData any
+}
+
+templ Layout(meta PageMeta) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>{ meta.Title }</title>
+
+            if meta.Description != "" {
+				<meta name="description" content={ meta.Description }/>
+			}
+
+			if meta.Robots != "" {
+				<meta name="robots" content={ meta.Robots }/>
+			}
+
+			if meta.Canonical != "" {
+				<link rel="canonical" href={ meta.Canonical }/>
+			}
+
+			<meta property="og:site_name" content="Coroki"/>
+			<meta property="og:locale" content="en_US"/>
+
+            for _, stylesheet := range meta.Stylesheets {
+                <link rel="stylesheet" href={assets(stylesheet)} />
+            }
+
+            if meta.StructuredData != nil {
+				<script type="application/ld+json">
+					{ renderJSON(meta.StructuredData) }
+				</script>
+			}
+		</head>
+		<body>
+			{ children... }
+
+            for _, script := range meta.Scripts {
+			    <script type="module" src={assets(script)}></script>
+            }
+		</body>
+	</html>
+}
+
+func assets(s string) string {
+    return "/assets/" + s
+}
+
