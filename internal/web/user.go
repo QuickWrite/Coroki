@@ -8,17 +8,7 @@ import (
 	"github.com/QuickWrite/Coroki/templates"
 )
 
-type UserHandler struct {
-	userService data.UserService
-}
-
-func NewUser(userService data.UserService) UserHandler {
-	return UserHandler{
-		userService: userService,
-	}
-}
-
-func (h UserHandler) HandleGetUsers(dependencies *data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
+func HandleGetUsers(dependencies *data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
 	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		users, err := dependencies.UserService.GetUsers(r.Context())
 

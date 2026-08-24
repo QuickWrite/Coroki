@@ -48,9 +48,7 @@ func addAuthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *da
 
 func addUnauthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	// Temporary route to test out the database
-	userRouter := web.NewUser(dependencies.UserStore)
-
-	routerGroup.GET("/users", mapHandler(userRouter.HandleGetUsers(dependencies)))
+	routerGroup.GET("/users", mapHandler(web.HandleGetUsers(dependencies)))
 }
 
 func addAppEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
