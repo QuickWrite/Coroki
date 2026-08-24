@@ -7,17 +7,17 @@ import (
 	db "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
 )
 
-type DbUserStore struct {
+type DbUserService struct {
 	query *db.Queries
 }
 
-func NewDbUserStore(query *db.Queries) DbUserStore {
-	return DbUserStore{
+func NewDbUserService(query *db.Queries) DbUserService {
+	return DbUserService{
 		query: query,
 	}
 }
 
-func (s DbUserStore) GetUsers(ctx context.Context) ([]data.User, error) {
+func (s DbUserService) GetUsers(ctx context.Context) ([]data.User, error) {
 	dbUsers, err := s.query.GetUsers(ctx)
 
 	if err != nil {

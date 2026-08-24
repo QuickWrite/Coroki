@@ -1,6 +1,7 @@
 package data
-
-import "context"
+import (
+	"context"
+)
 
 type User struct {
 	ID    int64  `json:"id"`
@@ -8,6 +9,7 @@ type User struct {
 	Email string `json:"email"`
 }
 
-type UserStore interface {
+// The main service that manages the users directly
+type UserService interface {
 	GetUsers(ctx context.Context) ([]User, error)
 }

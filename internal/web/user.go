@@ -9,18 +9,18 @@ import (
 )
 
 type UserHandler struct {
-	userStore data.UserStore
+	userService data.UserService
 }
 
-func NewUser(userStore data.UserStore) UserHandler {
+func NewUser(userService data.UserService) UserHandler {
 	return UserHandler{
-		userStore: userStore,
+		userService: userService,
 	}
 }
 
-func (h UserHandler) HandleGetUsers(dependencies data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
+func (h UserHandler) HandleGetUsers() func(context.Context, http.ResponseWriter, *http.Request) {
 	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-		users, err := h.userStore.GetUsers(r.Context())
+		users, err := h.userService.GetUsers(r.Context())
 
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)

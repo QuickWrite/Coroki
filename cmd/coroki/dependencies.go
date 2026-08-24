@@ -30,6 +30,6 @@ func createDependencies(database *sql.DB) data.Dependencies {
 	query := sqldb.New(database)
 
 	return data.Dependencies{
-		UserStore: db.NewDbUserStore(query),
+		UserService: db.NewDbUserService(query),
 	}
 }
