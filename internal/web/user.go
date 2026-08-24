@@ -18,9 +18,9 @@ func NewUser(userService data.UserService) UserHandler {
 	}
 }
 
-func (h UserHandler) HandleGetUsers() func(context.Context, http.ResponseWriter, *http.Request) {
+func (h UserHandler) HandleGetUsers(dependencies *data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
 	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-		users, err := h.userService.GetUsers(r.Context())
+		users, err := dependencies.UserService.GetUsers(r.Context())
 
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)

@@ -57,7 +57,7 @@ func main() {
 	}
 
 	dependencies := createDependencies(sqlDB)
-	handler := server.Routes(dependencies)
+	handler := server.Routes(&dependencies)
 
 	srv, err := server.Start(ctx, server.Config{
 		Addr:         env("ADDR", ":8080"),

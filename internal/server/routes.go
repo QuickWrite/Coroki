@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Routes(dependencies data.Dependencies) http.Handler {
+func Routes(dependencies *data.Dependencies) http.Handler {
 	r := gin.Default()
 	r.Use(gin.Logger(), gin.Recovery())
 
@@ -41,24 +41,24 @@ func mapHandler(f func(context.Context, http.ResponseWriter, *http.Request)) fun
 	}
 }
 
-func addAuthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencies) {
+func addAuthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	_ = routerGroup
 	_ = dependencies
 }
 
-func addUnauthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencies) {
+func addUnauthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	// Temporary route to test out the database
 	userRouter := web.NewUser(dependencies.UserStore)
 
 	routerGroup.GET("/users", mapHandler(userRouter.HandleGetUsers(dependencies)))
 }
 
-func addAppEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencies) {
+func addAppEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	_ = routerGroup
 	_ = dependencies
 }
 
-func addBaseEndpoints(routerGroup *gin.RouterGroup, dependencies data.Dependencies) {
+func addBaseEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	routerGroup.Static("/assets", "./web/dist")
 
 	_ = dependencies
