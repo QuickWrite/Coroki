@@ -11,10 +11,10 @@ frontend:
 	pnpm build
 
 templ:
-	templ generate
+	go tool templ generate
 
 sqlc:
-	sqlc generate
+	go tool sqlc generate
 
 run:
 	go run $(CMD_PATH)
