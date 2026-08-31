@@ -1,5 +1,6 @@
 package data
 
 type Dependencies struct {
-	UserService    UserService
+	UserService           UserService
+	AuthenticationService AuthenticationService
 }

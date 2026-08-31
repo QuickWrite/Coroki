@@ -20,6 +20,7 @@ import (
 	"github.com/QuickWrite/Coroki/internal/data"
 	"github.com/QuickWrite/Coroki/internal/db"
 	sqldb "github.com/QuickWrite/Coroki/internal/db/sqlc/gen"
+	"github.com/QuickWrite/Coroki/internal/security"
 )
 
 // Creates the needed dependencies for the application to work.
@@ -29,7 +30,10 @@ import (
 func createDependencies(database *sql.DB) data.Dependencies {
 	query := sqldb.New(database)
 
+	password := security.NewPasswordService(security.NewBcryptHasher(12))
+
 	return data.Dependencies{
-		UserService: db.NewDbUserService(query),
+		UserService:           db.NewDbUserService(query),
+		AuthenticationService: db.NewDbAuthenticationService(query, &password),
 	}
 }

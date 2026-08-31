@@ -9,6 +9,10 @@ type PasswordService interface {
 	NeedsRehash(encodedHash string) bool
 }
 
+type AuthenticationService interface {
+	Authenticate(ctx context.Context, email string, password string) (*User, error)
+}
+
 type User struct {
 	ID    int64  `json:"id"`
 	Name  string `json:"name"`
