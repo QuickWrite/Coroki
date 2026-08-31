@@ -10,13 +10,13 @@ CREATE TABLE users (
 );
 
 CREATE TABLE user_credentials (
-    user_id BIGSERIAL PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    user_id BIGINT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     password_hash TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- +goose Down
+DROP TABLE user_credentials;
 DROP TABLE users;
 DROP EXTENSION IF EXISTS CITEXT;
-DROP TABLE user_credentials;
