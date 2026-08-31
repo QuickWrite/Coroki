@@ -44,7 +44,7 @@ func (h BcryptHasher) Hash(password string) (string, error) {
 	return string(hash), nil
 }
 
-func (h BcryptHasher) Compare(encodedHash string, password string) error {
+func (h BcryptHasher) Compare(password string, encodedHash string) error {
 	return bcrypt.CompareHashAndPassword(
 		[]byte(encodedHash),
 		[]byte(password),
@@ -109,7 +109,7 @@ func (h Argon2idHasher) Hash(password string) (string, error) {
 	), nil
 }
 
-func (h Argon2idHasher) Compare(encodedHash string, password string) error {
+func (h Argon2idHasher) Compare(password string, encodedHash string) error {
 	params, salt, expectedHash, err := parseArgon2idHash(encodedHash)
 	if err != nil {
 		return err
@@ -311,7 +311,7 @@ func (h PlainTextHasher) Hash(password string) (string, error) {
 	return password, nil
 }
 
-func (h PlainTextHasher) Compare(encodedHash string, password string) error {
+func (h PlainTextHasher) Compare(password string, encodedHash string) error {
 	if subtle.ConstantTimeCompare(
 		[]byte(encodedHash),
 		[]byte(password),

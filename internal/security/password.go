@@ -19,6 +19,10 @@ func NewPasswordService(
 ) data.PasswordService {
 	m := make(map[string]data.PasswordHasher, len(hashers))
 
+	// To ensure that the current can also be accessed similarly to the other
+	// hashers when comparing, it is put into the same map.
+	m[current.Name()] = current
+
 	for _, hasher := range hashers {
 		m[hasher.Name()] = hasher
 	}
