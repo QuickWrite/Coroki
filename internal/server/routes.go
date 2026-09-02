@@ -59,5 +59,13 @@ func addAppEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependenci
 func addBaseEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	routerGroup.Static("/assets", "./web/dist")
 
+	routerGroup.GET("/login", mapHandler(web.HandleGetLogin(dependencies)))
+	routerGroup.POST("/login", mapHandler(web.HandlePostLogin(dependencies)))
+
+	routerGroup.GET("/signup", mapHandler(web.HandleGetSignup(dependencies)))
+	routerGroup.POST("/signup", mapHandler(web.HandlePostSignup(dependencies)))
+
+	routerGroup.GET("/test", mapHandler(web.HandleAuthTest(dependencies)))
+
 	_ = dependencies
 }
