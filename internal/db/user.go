@@ -8,12 +8,14 @@ import (
 )
 
 type DbUserService struct {
-	query *db.Queries
+	query    *db.Queries
+	password *data.PasswordService
 }
 
-func NewDbUserService(query *db.Queries) DbUserService {
+func NewDbUserService(query *db.Queries, password *data.PasswordService) DbUserService {
 	return DbUserService{
-		query: query,
+		query:    query,
+		password: password,
 	}
 }
 
@@ -34,4 +36,28 @@ func (s DbUserService) GetUsers(ctx context.Context) ([]data.User, error) {
 	}
 
 	return users, nil
+}
+
+func (s DbUserService) CreateUser(ctx context.Context, name string, email string, password string) (*data.User, error) {
+	hash, err := (*s.password).Hash(password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := s.query.CreateUserWithPasswordHash(ctx, db.CreateUserWithPasswordHashParams{
+		Name:         name,
+		Email:        email,
+		PasswordHash: hash,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &data.User{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}, nil
 }

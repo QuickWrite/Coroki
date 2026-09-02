@@ -33,7 +33,7 @@ func createDependencies(database *sql.DB) data.Dependencies {
 	password := security.NewPasswordService(security.NewBcryptHasher(12))
 
 	return data.Dependencies{
-		UserService:           db.NewDbUserService(query),
+		UserService:           db.NewDbUserService(query, &password),
 		AuthenticationService: db.NewDbAuthenticationService(query, &password),
 	}
 }

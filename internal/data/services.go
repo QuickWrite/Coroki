@@ -22,4 +22,6 @@ type User struct {
 // The main service that manages the users directly
 type UserService interface {
 	GetUsers(ctx context.Context) ([]User, error)
+
+	CreateUser(ctx context.Context, name string, email string, password string) (*User, error)
 }
