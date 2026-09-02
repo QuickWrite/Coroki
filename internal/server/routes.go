@@ -11,7 +11,6 @@ import (
 
 func Routes(dependencies *data.Dependencies) http.Handler {
 	r := gin.Default()
-	r.Use(gin.Logger(), gin.Recovery())
 
 	r.GET("/healthz", func(c *gin.Context) {
 		c.Writer.WriteHeader(http.StatusOK)
