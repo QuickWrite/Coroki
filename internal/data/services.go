@@ -1,6 +1,8 @@
 package data
+
 import (
 	"context"
+	"time"
 )
 
 type PasswordService interface {
@@ -11,6 +13,30 @@ type PasswordService interface {
 
 type AuthenticationService interface {
 	Authenticate(ctx context.Context, email string, password string) (*User, error)
+}
+
+type Session struct {
+	ID        string
+	UserID    int64
+	CreatedAt time.Time
+	ExpiresAt time.Time
+}
+
+type SessionService interface {
+	Create(
+		ctx context.Context,
+		userID int64,
+	) (*Session, error)
+
+	GetUser(
+		ctx context.Context,
+		sessionID string,
+	) (*User, error)
+
+	Revoke(
+		ctx context.Context,
+		sessionID string,
+	) error
 }
 
 type User struct {

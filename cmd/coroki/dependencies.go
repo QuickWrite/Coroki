@@ -35,5 +35,6 @@ func createDependencies(database *sql.DB) data.Dependencies {
 	return data.Dependencies{
 		UserService:           db.NewDbUserService(query, &password),
 		AuthenticationService: db.NewDbAuthenticationService(query, &password),
+		SessionService:        db.NewDbSessionService(query),
 	}
 }
