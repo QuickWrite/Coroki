@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/QuickWrite/Coroki/internal/data"
+	"github.com/QuickWrite/Coroki/internal/server/middleware"
 	"github.com/QuickWrite/Coroki/templates"
 )
 
@@ -140,25 +141,9 @@ func HandlePostSignup(dependencies *data.Dependencies, redirectTo string) func(c
 
 func HandleAuthTest(dependencies *data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
 	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("session_id")
-		if err != nil {
-			if err = templates.AuthTestNotLoggedIn().Render(ctx, w); err != nil {
-				writeError(w, http.StatusInternalServerError, "Could not render page")
-				return
-			}
-			return
-		}
+		user := middleware.GetUser(ctx)
 
-		user, err := dependencies.SessionService.GetUser(ctx, cookie.Value)
-		if err != nil {
-			if err = templates.AuthTestNotLoggedIn().Render(ctx, w); err != nil {
-				writeError(w, http.StatusInternalServerError, "Could not render page")
-				return
-			}
-			return
-		}
-
-		err = templates.AuthTestLoggedIn(user).Render(ctx, w)
+		err := templates.AuthTestLoggedIn(user).Render(ctx, w)
 		if err != nil {
 			writeError(w, http.StatusInternalServerError, "Could not render page")
 			return

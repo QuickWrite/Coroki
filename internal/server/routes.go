@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/QuickWrite/Coroki/internal/data"
+	"github.com/QuickWrite/Coroki/internal/server/middleware"
 	"github.com/QuickWrite/Coroki/internal/web"
 	"github.com/gin-gonic/gin"
 )
@@ -41,8 +42,7 @@ func mapHandler(f func(context.Context, http.ResponseWriter, *http.Request)) fun
 }
 
 func addAuthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
-	_ = routerGroup
-	_ = dependencies
+	routerGroup.Use(middleware.APIAuth(dependencies))
 }
 
 func addUnauthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
@@ -51,18 +51,17 @@ func addUnauthenticatedAPIEndpoints(routerGroup *gin.RouterGroup, dependencies *
 }
 
 func addAppEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
-	_ = routerGroup
-	_ = dependencies
+	routerGroup.Use(middleware.Auth(dependencies, "/login"))
+
+	routerGroup.GET("/test", mapHandler(web.HandleAuthTest(dependencies)))
 }
 
 func addBaseEndpoints(routerGroup *gin.RouterGroup, dependencies *data.Dependencies) {
 	routerGroup.Static("/assets", "./web/dist")
 
 	routerGroup.GET("/login", mapHandler(web.HandleGetLogin(dependencies)))
-	routerGroup.POST("/login", mapHandler(web.HandlePostLogin(dependencies, "/test")))
+	routerGroup.POST("/login", mapHandler(web.HandlePostLogin(dependencies, "/app/test")))
 
 	routerGroup.GET("/signup", mapHandler(web.HandleGetSignup(dependencies)))
-	routerGroup.POST("/signup", mapHandler(web.HandlePostSignup(dependencies, "/test")))
-	routerGroup.GET("/test", mapHandler(web.HandleAuthTest(dependencies)))
-	_ = dependencies
+	routerGroup.POST("/signup", mapHandler(web.HandlePostSignup(dependencies, "/app/test")))
 }
