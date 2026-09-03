@@ -25,7 +25,7 @@ func HandleGetLogin(dependencies *data.Dependencies) func(context.Context, http.
 	}
 }
 
-func HandlePostLogin(dependencies *data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
+func HandlePostLogin(dependencies *data.Dependencies, redirectTo string) func(context.Context, http.ResponseWriter, *http.Request) {
 	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 
@@ -71,7 +71,7 @@ func HandlePostLogin(dependencies *data.Dependencies) func(context.Context, http
 		}
 		http.SetCookie(w, cookie)
 
-		http.Redirect(w, r, "/test", http.StatusSeeOther)
+		http.Redirect(w, r, redirectTo, http.StatusSeeOther)
 	}
 }
 
@@ -86,7 +86,7 @@ func HandleGetSignup(dependencies *data.Dependencies) func(context.Context, http
 	}
 }
 
-func HandlePostSignup(dependencies *data.Dependencies) func(context.Context, http.ResponseWriter, *http.Request) {
+func HandlePostSignup(dependencies *data.Dependencies, redirectTo string) func(context.Context, http.ResponseWriter, *http.Request) {
 	return func(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 
@@ -134,7 +134,7 @@ func HandlePostSignup(dependencies *data.Dependencies) func(context.Context, htt
 		}
 		http.SetCookie(w, cookie)
 
-		http.Redirect(w, r, "/test", http.StatusSeeOther)
+		http.Redirect(w, r, redirectTo, http.StatusSeeOther)
 	}
 }
 
